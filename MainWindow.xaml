@@ -1,0 +1,53 @@
+﻿<Window x:Class="PongGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pong" MinHeight="450" MinWidth="814" KeyDown="Window_KeyDown"
+        SizeChanged="Window_SizeChanged" Background="#FF2C5B52"
+        >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="14*"/>
+            <ColumnDefinition Width="195*"/>
+            <ColumnDefinition Width="605*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Для верхней панели -->
+            <RowDefinition Height="*"/>
+            <!-- Для игрового холста -->
+        </Grid.RowDefinitions>
+
+        <Canvas Name="GameCanvas" Background="#FF2C5B52" Grid.Row="1" Grid.ColumnSpan="3">
+            <!-- Полоса сетки -->
+            <Rectangle Name="MiddleLine" Width="5" Fill="White" />
+
+            <Ellipse Name="Ball" Width="50" Height="50" Fill="#FFF36B29" />
+            <Rectangle Name="Player1" Width="25" Height="200" Fill="Blue" />
+            <Rectangle Name="Player2" Width="25" Height="200" Fill="Red" />
+        </Canvas>
+
+        <!-- Верхняя панель с именами и счетом игроков -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Height="50" Background="LightGray" Grid.Column="2" Margin="60,0,0,0" Width="429">
+            <StackPanel Margin="10" VerticalAlignment="Center">
+                <TextBlock Text="Имя Игрока 1:" HorizontalAlignment="Center"/>
+                <TextBox Name="Player1Name" Width="100" HorizontalAlignment="Center" Text="Игрок 1"/>
+            </StackPanel>
+
+            <StackPanel Margin="10" VerticalAlignment="Center">
+                <TextBlock Name="ScoreLabel1" Text="Игрок 1: 0" HorizontalAlignment="Center" FontSize="16"/>
+            </StackPanel>
+
+            <StackPanel Margin="10" VerticalAlignment="Center">
+                <TextBlock Text="Имя Игрока 2:" HorizontalAlignment="Center"/>
+                <TextBox Name="Player2Name" Width="100" HorizontalAlignment="Center" Text="Игрок 2"/>
+            </StackPanel>
+
+            <StackPanel Margin="10" VerticalAlignment="Center">
+                <TextBlock Name="ScoreLabel2" Text="Игрок 2: 0" HorizontalAlignment="Center" FontSize="16"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Кнопка для начала игры -->
+        <Button Name="StartButton" Content="Начать игру" Width="100" Height="30" Click="StartButton_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="224,0,0,0"/>
+    </Grid>
+</Window>
