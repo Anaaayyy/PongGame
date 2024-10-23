@@ -10,9 +10,13 @@ namespace PongGame
     public partial class MainWindow : Window
     {
         private DispatcherTimer gameTimer; // Таймер для управления игровым циклом
-        private double ballSpeedX = 70, ballSpeedY = 40;// Скорости мяча по оси X и Y
+        private double ballSpeedX = 100, ballSpeedY = 70;// Скорости мяча по оси X и Y
         private int player1Score = 0, player2Score = 0; // Счет игроков
         private const int winningScore = 5; // Количество очков для победы
+
+        private bool isPlayer1Active = true; // Ракетка игрока 1 активна
+        private bool isPlayer2Active = true; // Ракетка игрока 2 активна
+
 
         public MainWindow()
         {
@@ -28,7 +32,21 @@ namespace PongGame
             // Перемещение мяча по текущим скоростям
             Canvas.SetLeft(Ball, Canvas.GetLeft(Ball) + ballSpeedX);
             Canvas.SetTop(Ball, Canvas.GetTop(Ball) + ballSpeedY);
+
+            // Блокировка ракеток при пересечении мяча середины поля
+            double ballCenterX = Canvas.GetLeft(Ball) + Ball.Width / 2;
+            if (ballCenterX > GameCanvas.ActualWidth / 2)
+            {
+                isPlayer1Active = false; // Блокируем игрока 1
+                isPlayer2Active = true;  // Разблокируем игрока 2
+            }
+            else if (ballCenterX < GameCanvas.ActualWidth / 2)
+            {
+                isPlayer1Active = true;  // Разблокируем игрока 1
+                isPlayer2Active = false; // Блокируем игрока 2
+            }
         }
+
 
         private void CheckCollisions()
         {
@@ -177,7 +195,6 @@ namespace PongGame
             gameTimer.Start(); // Запуск таймера
 
             UpdateMiddleLine(); // Обновляем позицию сетки
-
             // Скрытие кнопки "Начать игру" и установка фокуса на игровом холсте
             StartButton.Visibility = Visibility.Collapsed;
             GameCanvas.Focus();
@@ -185,16 +202,17 @@ namespace PongGame
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            // Управление движением игроков с помощью клавиш
-            if (e.Key == Key.W)
-                MovePlayer(Player1, -20);
-            else if (e.Key == Key.S)
-                MovePlayer(Player1, 20);
-            else if (e.Key == Key.Up)
-                MovePlayer(Player2, -20);
-            else if (e.Key == Key.Down)
-                MovePlayer(Player2, 20);
+            if (e.Key == Key.W && isPlayer1Active)
+                MovePlayer(Player1, -10); // Плавное движение вверх
+            else if (e.Key == Key.S && isPlayer1Active)
+                MovePlayer(Player1, 10);  // Плавное движение вниз
+            else if (e.Key == Key.Up && isPlayer2Active)
+                MovePlayer(Player2, -10); // Плавное движение вверх
+            else if (e.Key == Key.Down && isPlayer2Active)
+                MovePlayer(Player2, 10);  // Плавное движение вниз
         }
+
+
 
         private void MovePlayer(Rectangle player, double offset)
         {
